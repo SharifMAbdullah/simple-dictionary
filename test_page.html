@@ -2,15 +2,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="popup.css">
     <title>Document</title>
 </head>
 <body>
 this is a random text
 <p id="sus">this is a text within paragraph</p>
 <h1>this is another text within a header</h1>
-<div>this is a div vro and <div>
+<div>this is a div vro and 
+    <div>
     this is a div wihin a div vro
-</div></div>
+    </div>
+</div>
+
+<div class="popup" onmouseup="showPopUp()">Click me!
+    <span class="popuptext" id="resultPopUp">something</span>
+</div>
 <script src="script.js"></script>
 </body>
 </html>
