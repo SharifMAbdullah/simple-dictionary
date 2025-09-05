@@ -7,11 +7,11 @@ document.addEventListener("mouseup", (e) => {
               `https://api.dictionaryapi.dev/api/v2/entries/en/${sourceText}`
             );
             const result = await response.json();
-            return result;
+            return result[0]["meanings"][0]["definitions"][0]["definition"];
         };
         wordMeaning(selectedText).then((result) => {
             console.log(result)
-            localStorage.setItem("meaning", result)
+            document.getElementById("popup").innerText = result
             // window.location.href = "result_page.html"
             // const wordMeaning = localStorage.getItem("meaning");
             // document.getElementById("displayWord").innerText = wordMeaning;
@@ -33,9 +33,9 @@ function isSpaceInPhrase(str) {
     return true;
 }
 
-function showPopUp() {
-    console.log("eta execute")
+function showPopUp(e) {
+    e.preventDefault()
     var popup = document.getElementById("resultPopUp");
-    console.log(popup)
     popup.classList.toggle("show");
 }
+
