@@ -10,14 +10,10 @@ document.addEventListener("mouseup", (e) => {
             return result[0]["meanings"][0]["definitions"][0]["definition"];
         };
         wordMeaning(selectedText).then((result) => {
-            console.log(result)
-            document.getElementById("popup").innerText = result
-            // window.location.href = "result_page.html"
-            // const wordMeaning = localStorage.getItem("meaning");
-            // document.getElementById("displayWord").innerText = wordMeaning;
-            document.getElementById("resultPopUp").innerText = result;
+            addWordMeaningPopup(result);
         })
     }
+    
 });
 
 function isSpaceInPhrase(str) {
@@ -33,9 +29,30 @@ function isSpaceInPhrase(str) {
     return true;
 }
 
-function showPopUp(e) {
-    e.preventDefault()
-    var popup = document.getElementById("resultPopUp");
-    popup.classList.toggle("show");
+function addWordMeaningPopup(meaning) {
+    addCSS(
+      "display: block; top: 362.633px; left: 724.183px; position: fixed; background: rgb(247, 247, 196);"
+    );
+    const wordMeaningdiv = document.createElement("div");
+    wordMeaningdiv.classList.add("wordMeaningContainer");
+    wordMeaningdiv.innerHTML = meaning;
+    document.body.appendChild(wordMeaningdiv);
 }
+
+const addCSS = (css) => (
+    document.head.appendChild(
+        document.createElement("style")
+    ).innerHTML = css);
+
+// In dailystar, they add the popup as a div at the very end of the
+// <body> like this: 
+{/* <div id="wordMeaningContainer" style="display: block; top: 362.633px; left: 724.183px; position: fixed; background: rgb(247, 247, 196);">
+    <div id="wordMeaning"><h3>private</h3><p>A soldier of the lowest rank in the army.</p></div>
+    <div id="crossIcon" style="display: block;">X</div>
+</div>  */}
+// function showPopUp(e) {
+//     e.preventDefault()
+//     var popup = document.getElementById("resultPopUp");
+//     popup.classList.toggle("show");
+// }
 

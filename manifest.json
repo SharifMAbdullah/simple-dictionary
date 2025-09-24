@@ -10,11 +10,22 @@
       "128": "images/dictionary_128.png"
     },
     "action": {
-      "default_popup": "popup.html"
+        
     },
     "content_scripts": [{
         "js": ["script.js"],
         "matches": ["<all_urls>"]
-    }]
+    }],
+    "background":{
+      "service_worker": "service_worker.js",
+      "type":"module"
+    },
+    "permissions": [
+      "scripting"
+    ],
+    "host_permissions": [
+      "http://*/*",
+      "https://*/*"
+    ]
   }
   
