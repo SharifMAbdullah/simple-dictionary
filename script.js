@@ -1,6 +1,7 @@
+// for keeping just one style tag for wordMeaningContainer in the current page
 window.addEventListener("load", (event) => {
   addCSS(
-    ".wordMeaningContainer {display: block; top: 362.633px; left: 724.183px; position: fixed; background: rgb(247, 247, 196)}"
+    ".wordMeaningContainer {display: block; z-index: 999; position: fixed; background: rgb(247, 247, 196)}"
   );
 });
 
@@ -17,6 +18,23 @@ document.addEventListener("mouseup", (e) => {
     };
     wordMeaning(selectedText).then((result) => {
       addWordMeaningPopup(result);
+      // for finding bounding box
+      // use this to change the top and left of the wordMeaningContainer
+      var clicked = findClickedWord(
+        e.target.childNodes[0],
+        e.clientX,
+        e.clientY
+      );
+      if (clicked) {
+        var start = clicked[1];
+        var r = clicked[2];
+        var original = document.getElementsByClassName(
+          "wordMeaningContainer"
+        )[0].style;
+        var temp1 = r.top - 30;
+        original.top = temp1.toString() + "px";
+        original.left = r.left.toString() + "px";
+      }
     });
   }
 });
@@ -37,30 +55,49 @@ function isSpaceInPhrase(str) {
 }
 
 function addWordMeaningPopup(meaning) {
-  // if (!addWordMeaningPopup.firstRun) {
-  //   addCSS(
-  //     ".wordMeaningContainer {display: block; top: 362.633px; left: 724.183px; position: fixed; background: rgb(247, 247, 196)}"
-  //   );
-  // }
-  const wordMeaningdiv = document.createElement("div");
-  wordMeaningdiv.classList.add("wordMeaningContainer");
-  wordMeaningdiv.innerHTML = meaning;
-  document.body.appendChild(wordMeaningdiv);
+  const isWordMeaningDivExists = document.getElementsByClassName(
+    "wordMeaningContainer"
+  )[0];
+  if (isWordMeaningDivExists) {
+    isWordMeaningDivExists.innerHTML = meaning;
+  } else {
+    const wordMeaningdiv = document.createElement("div");
+    wordMeaningdiv.classList.add("wordMeaningContainer");
+    wordMeaningdiv.innerHTML = meaning;
+    document.body.appendChild(wordMeaningdiv);
+  }
 }
 
+function findClickedWord(parentElt, x, y) {
+  var range = document.createRange();
+  var words = parentElt.textContent.split(" ");
+
+  var start = 0;
+  var end = 0;
+  for (var i = 0; i < words.length; i++) {
+    var word = words[i];
+    end = start + word.length;
+    range.setStart(parentElt, start);
+    range.setEnd(parentElt, end);
+    // not getBoundingClientRect as word could wrap
+    var rects = range.getClientRects();
+    var clickedRect = isClickInRects(rects);
+    if (clickedRect) {
+      return [word, start, clickedRect];
+    }
+    start = end + 1;
+  }
+
+  function isClickInRects(rects) {
+    for (var i = 0; i < rects.length; ++i) {
+      var r = rects[i];
+      if (r.left < x && r.right > x && r.top < y && r.bottom > y) {
+        return r;
+      }
+    }
+    return false;
+  }
+  return null;
+}
 const addCSS = (css) =>
   (document.head.appendChild(document.createElement("style")).innerHTML = css);
-
-// In dailystar, they add the popup as a div at the very end of the
-// <body> like this:
-{
-  /* <div id="wordMeaningContainer" style="display: block; top: 362.633px; left: 724.183px; position: fixed; background: rgb(247, 247, 196);">
-    <div id="wordMeaning"><h3>private</h3><p>A soldier of the lowest rank in the army.</p></div>
-    <div id="crossIcon" style="display: block;">X</div>
-</div>  */
-}
-// function showPopUp(e) {
-//     e.preventDefault()
-//     var popup = document.getElementById("resultPopUp");
-//     popup.classList.toggle("show");
-// }
