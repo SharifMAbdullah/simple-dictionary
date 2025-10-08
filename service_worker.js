@@ -1,5 +1,3 @@
-// //probably use this to toggle on/off?
-
 //using the async version to use the sendResponse argument after the listener returns
 function handleMessage(request, sender, sendResponse) {
   console.log(`content script sent a message: ${request.content}`);
@@ -9,7 +7,7 @@ function handleMessage(request, sender, sendResponse) {
     } else {
       sendResponse({response: "on"})
     }
-  }, 200);
+  }, 100);
   return true;
 }
 
