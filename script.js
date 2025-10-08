@@ -45,12 +45,13 @@ function mainBoss(e) {
         const result = await response.json();
         return result[0]["meanings"][0]["definitions"][0]["definition"];
       } catch (error) {
-        return "Couldn't find any meaning";
+        return "<i>Couldn't find any meaning</i>";
       }
     };
     wordMeaning(selectedText).then((result) => {
       addWordMeaningPopup(result);
       adjustTopAndLeft(e);
+      closePopUp()
     });
   }
 }
@@ -127,3 +128,11 @@ function findClickedWord(parentElt, x, y) {
   }
   return null;
 }
+
+function closePopUp() {
+  document.addEventListener("keydown", (event) => {
+    if (event.code === "Escape") {
+      document.getElementsByClassName("wordMeaningContainer")[0].remove()
+    }
+  });
+  };
